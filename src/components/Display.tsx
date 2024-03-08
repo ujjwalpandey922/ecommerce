@@ -41,16 +41,16 @@ const Display = () => {
           </button>
           {/* Buttons for editing and deleting the selected order */}
           {singleSelected && (
-            <div className="md:absolute static w-full justify-end top-0 right-0 flex gap-4">
+            <div className="md:absolute static w-full justify-end -top-2 right-0 flex gap-4">
               <MdDeleteForever
-                className="cursor-pointer hover:scale-110 hover:text-sky-600 transition-all"
+                className="cursor-pointer text-3xl hover:scale-110 hover:text-sky-600 transition-all"
                 onClick={() => {
                   setModalOpen(true);
                   setModalType("delete");
                 }}
               />
               <FaEdit
-                className="cursor-pointer hover:scale-110 hover:text-sky-600 transition-all"
+                className="cursor-pointer text-3xl hover:scale-110 hover:text-sky-600 transition-all"
                 onClick={() => {
                   setModalOpen(true);
                   setModalType("edit");

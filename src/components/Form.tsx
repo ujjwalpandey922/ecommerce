@@ -43,44 +43,48 @@ const Form = ({
   });
   const [info, setInfo] = useState<OrderProp>(initialContact);
 
-  // Function to handle changes in form fields
   const handleChange: React.ChangeEventHandler<
     HTMLSelectElement | HTMLInputElement
   > = (e) => {
     const { value, name } = e.target;
 
     // Validate fields based on name
-    if (name === "customer_name") {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: value.length < 3 ? "Name should be more than 3 characters" : "",
-      }));
+    let errorMessage = "";
+
+    if (value.trim() === "") {
+      errorMessage = "Field cannot be empty";
+    } else if (name === "customer_name" && value.length < 3) {
+      errorMessage = "Name should be more than 3 characters";
     } else if (name === "customer_email") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: !emailRegex.test(value) ? "Invalid email address" : "",
-      }));
+      errorMessage = !emailRegex.test(value) ? "Invalid email address" : "";
     } else if (name === "product") {
       const validProducts = ["Product 1", "Product 2", "Product 3"];
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: validProducts.includes(value) ? "" : "Invalid product",
-      }));
-    } else if (name === "quantity") {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]:
-          parseInt(value) <= 0
-            ? "Quantity must be a number greater than 0"
-            : "",
-      }));
+      errorMessage = validProducts.includes(value) ? "" : "Invalid product";
+    } else if (
+      name === "quantity" &&
+      (parseInt(value) <= 0 || isNaN(parseInt(value)))
+    ) {
+      errorMessage = "Quantity must be a number greater than 0";
     }
-    setInfo((pre) => ({ ...pre, [name]: value }));
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: errorMessage,
+    }));
+
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      [name]: value,
+    }));
   };
 
   // Check if there are any errors in the form
   const hasErrors = Object.values(errors).some((error) => error !== "");
+  // Check if there are any Fields Empty
+  const isFieldEmpty = Object.values(info)
+    .slice(1)
+    .some((fields) => fields == "");
 
   // Redux dispatch hook
   const dispatch = useDispatch();
@@ -113,7 +117,7 @@ const Form = ({
     <form onSubmit={handleSubmit} className="w-full">
       {/* Display Order ID for editing */}
       {type == "edit" && (
-        <div className="mb-4">
+        <div className="mb-10">
           <label
             htmlFor="id"
             className="block text-sm font-medium text-gray-700"
@@ -147,9 +151,8 @@ const Form = ({
           onChange={handleChange}
           className="mt-1 p-2 border border-gray-300 rounded-md w-full"
         />
-        {errors.customer_name && (
-          <p className="text-red-500 text-sm">{errors.customer_name}</p>
-        )}
+
+        <p className="text-red-500 text-sm min-h-6"> {errors?.customer_name}</p>
       </div>
       <div className="mb-4">
         <label
@@ -166,9 +169,8 @@ const Form = ({
           onChange={handleChange}
           className="mt-1 p-2 border border-gray-300 rounded-md w-full"
         />
-        {errors.customer_email && (
-          <p className="text-red-500 text-sm">{errors.customer_email}</p>
-        )}
+
+        <p className="text-red-500 text-sm min-h-6">{errors?.customer_email}</p>
       </div>
       <div className="mb-4">
         <label
@@ -189,9 +191,8 @@ const Form = ({
           <option value="Product 2">Product 2</option>
           <option value="Product 3">Product 3</option>
         </select>
-        {errors.product && (
-          <p className="text-red-500 text-sm">{errors.product}</p>
-        )}
+
+        <p className="text-red-500 text-sm min-h-6">{errors?.product}</p>
       </div>
       <div className="mb-4">
         <label
@@ -208,18 +209,18 @@ const Form = ({
           onChange={handleChange}
           className="mt-1 p-2 border border-gray-300 rounded-md w-full"
         />
-        {errors.quantity && (
-          <p className="text-red-500 text-sm">{errors.quantity}</p>
-        )}
+
+        <p className="text-red-500 text-sm min-h-6">{errors?.quantity}</p>
       </div>
       {/* Submit button */}
       <div className="w-full">
         <button
           type="submit"
           className={`bg-blue-600 text-white px-4 py-2 w-full hover:bg-blue-500 cursor-pointer rounded-lg ${
-            hasErrors && "opacity-50 cursor-not-allowed"
+            (hasErrors || isFieldEmpty) &&
+            "opacity-50 pointer-events-none hover:bg-blue-600 "
           }`}
-          disabled={hasErrors}
+          disabled={hasErrors || isFieldEmpty}
         >
           Save
         </button>

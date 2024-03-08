@@ -118,7 +118,7 @@ const Signup: React.FC = () => {
           </label>
           <input
             type="text"
-            className={`block text-black text-lg border-grey-light w-full p-2 px-4 mb-4 rounded-[7px] border border-neutral-400 ${
+            className={`block text-black text-lg border-grey-light w-full p-2 px-4  rounded-[7px] border border-neutral-400 ${
               errors.email && "border-red-500"
             }`}
             name="email"
@@ -126,9 +126,8 @@ const Signup: React.FC = () => {
             value={credentials.email}
             onChange={(e) => handleOnchange(e)}
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm">{errors.email}</p>
-          )}
+
+          <p className="text-red-500 min-h-6 text-sm">{errors?.email}</p>
         </div>
 
         {/* Password */}
@@ -146,9 +145,8 @@ const Signup: React.FC = () => {
             value={credentials.password}
             onChange={(e) => handleOnchange(e)}
           />
-          {errors.password && (
-            <p className="text-red-500 text-sm">{errors.password}</p>
-          )}
+
+          <p className="text-red-500 text-sm min-h-6">{errors?.password}</p>
         </div>
 
         {/* Confirm Password */}
@@ -166,9 +164,10 @@ const Signup: React.FC = () => {
             value={credentials.confirmPassword}
             onChange={(e) => handleOnchange(e)}
           />
-          {errors.confirmPassword && (
-            <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
-          )}
+
+          <p className="text-red-500 text-sm min-h-6">
+            { errors?.confirmPassword}
+          </p>
         </div>
 
         {/* TERMS AND CONDITION */}

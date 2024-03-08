@@ -51,17 +51,17 @@ const Modal = ({ type, setShow }: Props) => {
   // Render the component
   return (
     <div
-      className="bg-[#0000007f] w-full h-screen fixed inset sm:p-12 p-2 top-0 left-0 flex items-center justify-center overflow-auto"
+      className="bg-[#0000007f] w-full h-screen overflow-auto pt-12  fixed inset-0  flex items-center justify-center "
       ref={outer} // Ref to the outer div of the modal
       onClick={(e) => handleOuterClick(e)} // Handle click outside the modal
     >
       <div
-        className=" sm:p-12 p-2 mt-12 rounded-2xl bg-slate-200 max-w-lg w-full text-black text-[1.5rem]  flex flex-col gap-8"
+        className="rounded-2xl my-8 bg-slate-200 max-w-lg  w-full text-black text-[1.5rem]  flex flex-col gap-8"
         ref={inner} // Ref to the inner div of the modal
       >
         {/* Render content based on the type of modal */}
         {type === "delete" && (
-          <>
+          <div className="p-4 flex flex-col gap-4">
             <h1 className="text-center font-extrabold text-3xl">
               Delete Contact???
             </h1>
@@ -81,10 +81,10 @@ const Modal = ({ type, setShow }: Props) => {
                 DELETE
               </button>
             </div>
-          </>
+          </div>
         )}
         {type === "edit" && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 p-4 ">
             <h1 className="text-center font-extrabold text-3xl">
               Edit Contact
             </h1>
@@ -93,7 +93,7 @@ const Modal = ({ type, setShow }: Props) => {
           </div>
         )}
         {type === "add" && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 p-4">
             <h1 className="text-center font-extrabold text-3xl">
               Add New Contact
             </h1>
